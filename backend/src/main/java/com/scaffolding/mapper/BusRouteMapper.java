@@ -12,13 +12,26 @@ public interface BusRouteMapper extends BaseMapper<BusRoute> {
 
     @Select("SELECT * FROM bus_route " +
             "WHERE park_id = #{parkId} " +
-            "AND route_type = #{routeType} " +
+            "AND (route_type = #{routeType} OR route_type LIKE CONCAT('%', #{routeType}, '%')) " +
             "AND occupied_count < capacity " +
             "AND deleted = 0 " +
             "ORDER BY departure_time ASC " +
             "LIMIT 1")
     BusRoute findAvailableRoute(@Param("parkId") Long parkId,
                                 @Param("routeType") String routeType);
+
+    @Select("SELECT * FROM bus_route " +
+            "WHERE park_id = #{parkId} " +
+            "AND occupied_count < capacity " +
+            "AND deleted = 0 " +
+            "ORDER BY departure_time ASC " +
+            "LIMIT 1")
+    BusRoute findAnyAvailableRoute(@Param("parkId") Long parkId);
+
+    @Select("SELECT COUNT(*) FROM bus_route " +
+            "WHERE park_id = #{parkId} " +
+            "AND deleted = 0")
+    int countRoutesByPark(@Param("parkId") Long parkId);
 
     @Update("UPDATE bus_route SET occupied_count = occupied_count + 1 " +
             "WHERE id = #{routeId} AND occupied_count < capacity AND deleted = 0")

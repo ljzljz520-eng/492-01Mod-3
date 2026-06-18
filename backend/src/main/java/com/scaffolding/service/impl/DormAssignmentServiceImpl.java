@@ -117,8 +117,44 @@ public class DormAssignmentServiceImpl extends ServiceImpl<DormAssignmentMapper,
             if (dto.getAssignTime() != null) {
                 dto.setDaysSinceAssign(Duration.between(dto.getAssignTime(), now).toDays());
             }
+            dto.setEntryStatusText(getEntryStatusText(dto.getEntryStatus()));
+            dto.setCheckinStatusText(getCheckinStatusText(dto.getCheckinStatus()));
         }
         return list;
+    }
+
+    private String getEntryStatusText(String status) {
+        if (status == null) {
+            return "未知";
+        }
+        switch (status) {
+            case "PENDING":
+                return "待确认入职";
+            case "CONFIRMED":
+                return "已确认入职";
+            case "REJECTED":
+                return "已拒绝入职";
+            default:
+                return status;
+        }
+    }
+
+    private String getCheckinStatusText(String status) {
+        if (status == null) {
+            return "未安排";
+        }
+        switch (status) {
+            case "UNASSIGNED":
+                return "未安排";
+            case "PENDING":
+                return "待确认入住";
+            case "CONFIRMED":
+                return "已确认入住";
+            case "CANCELLED":
+                return "已取消";
+            default:
+                return status;
+        }
     }
 
     @Override

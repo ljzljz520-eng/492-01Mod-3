@@ -25,6 +25,7 @@ public interface DormAssignmentMapper extends BaseMapper<DormAssignment> {
             "r.room_number AS roomNumber, " +
             "da.bed_number AS bedNumber, " +
             "w.night_shift_count AS nightShiftCount, " +
+            "w.entry_status AS entryStatus, " +
             "w.checkin_status AS checkinStatus, " +
             "da.assign_time AS assignTime, " +
             "da.assignment_reason AS assignmentReason, " +
@@ -36,6 +37,7 @@ public interface DormAssignmentMapper extends BaseMapper<DormAssignment> {
             "LEFT JOIN dorm_building b ON da.building_id = b.id " +
             "LEFT JOIN dorm_room r ON da.room_id = r.id " +
             "WHERE da.assignment_status = 'ASSIGNED' " +
+            "AND w.entry_status = 'CONFIRMED' " +
             "AND w.checkin_status != 'CONFIRMED' " +
             "AND w.deleted = 0 " +
             "AND da.deleted = 0 " +
